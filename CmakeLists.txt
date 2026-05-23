@@ -3,6 +3,9 @@ project(CPlusPlus-Standard VERSION 1.0 LANGUAGES CXX C)
 
 message(STATUS "$ENV{HOME}")
 
+# 设置所有可执行文件的输出目录为 build/bin
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 if(UNIX)
     message(STATUS "[Linux env usage]: cd cmakebuild && cmake -DCMAKE_BUILD_TYPE=Debug ../ ")
 elseif(WIN32)
