@@ -1,25 +1,14 @@
-project (CPlusPlus14Test)
+cmake_minimum_required(VERSION 3.10)
+project(CPlusPlus14 VERSION 1.0 LANGUAGES CXX)
 
-# Add a library with the above sources
-include_directories(./ ${SRC_DIR_ROOT})
-FOREACH(SRC_DIR ${SRC_DIR_ROOT})
-    file(GLOB_RECURSE USER_FILE_PATH ${USER_FILE_PATH} ${SRC_DIR}/*.cc ${SRC_DIR}/*.cpp ${SRC_DIR}/*.hpp)
-ENDFOREACH(SRC_DIR)
-
-aux_source_directory(. SRC_LIST) # 编译源文件
-add_library(${PROJECT_NAME} ${SRC_LIST} ${USER_FILE_PATH}) # 编译可执行程序
-
-CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
-
-if(COMPILER_SUPPORTS_CXX14)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-else()
-    message(WARNING "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
-endif()
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 自动查找所有cpp文件
+file(GLOB CPP_FILES "*.cpp")
 
-add_library(sublib::libCPlusPlus14 ALIAS ${PROJECT_NAME})
-target_include_directories( ${PROJECT_NAME}
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
-)
+# 为每个cpp文件创建可执行文件,添加版本前缀避免命名冲突
+foreach(CPP_FILE ${CPP_FILES})
+    get_filename_component(FILE_NAME ${CPP_FILE} NAME_WE)
+    add_executable(cpp14_${FILE_NAME} ${FILE_NAME}.cpp)
+endforeach()
